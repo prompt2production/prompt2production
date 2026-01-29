@@ -294,8 +294,18 @@
         }
 
         .project-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             font-size: 1.4rem;
             font-weight: 600;
+        }
+
+        .project-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: contain;
         }
 
         .project-status {
@@ -474,7 +484,10 @@
                 <!-- FoundersTab -->
                 <article class="project-card">
                     <div class="project-header">
-                        <h4 class="project-title">FoundersTab</h4>
+                        <h4 class="project-title">
+                            <img src="https://founderstab.com/favicon.png" alt="" class="project-icon">
+                            FoundersTab
+                        </h4>
                         <span class="project-status status-beta">Public Beta</span>
                     </div>
                     <p class="project-description">
@@ -501,7 +514,13 @@
                 <!-- Coming Soon Placeholder -->
                 <article class="project-card coming-soon-card">
                     <div class="project-header">
-                        <h4 class="project-title">More Projects Coming Soon</h4>
+                        <h4 class="project-title">
+                            <svg class="project-icon" viewBox="0 0 32 32" fill="none" style="opacity: 0.5;">
+                                <rect width="32" height="32" rx="6" fill="var(--cyan)" fill-opacity="0.2"/>
+                                <path d="M16 8l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6l2-6z" fill="var(--cyan)" fill-opacity="0.4"/>
+                            </svg>
+                            More Projects Coming Soon
+                        </h4>
                         <span class="project-status status-coming">In Progress</span>
                     </div>
                     <p class="project-description">
@@ -521,7 +540,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p class="footer-text">Built with <span class="cyan">vibes</span> and AI • © 2026 Prompt to Production</p>
+            <p class="footer-text">Built with <span class="cyan">vibes</span> and AI • © 2025 Prompt to Production</p>
         </footer>
     </div>
 </body>
