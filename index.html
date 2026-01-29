@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt to Production | Vibe-Driven Development</title>
+    <meta name="description" content="Chris Williams - 20+ years shipping production systems. Building in public with AI and Vibe-Driven Development.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d0d14;
+            --bg-card: #12121c;
+            --cyan: #00e5ff;
+            --cyan-glow: rgba(0, 229, 255, 0.3);
+            --cyan-dim: rgba(0, 229, 255, 0.1);
+            --text-primary: #f0f0f5;
+            --text-secondary: #8a8a9a;
+            --border: rgba(0, 229, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Circuit pattern background */
+        .circuit-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--cyan) 1px, transparent 1px),
+                linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* Animated gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(100, 0, 255, 0.15) 0%, transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 30px); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 0 4rem;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Avatar */
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cyan);
+            box-shadow: 
+                0 0 30px var(--cyan-glow),
+                0 0 60px var(--cyan-dim);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 30px var(--cyan-glow), 0 0 60px var(--cyan-dim); }
+            50% { box-shadow: 0 0 40px var(--cyan-glow), 0 0 80px var(--cyan-glow); }
+        }
+
+        .avatar-ring {
+            position: absolute;
+            inset: -10px;
+            border: 1px solid var(--cyan);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Brand title */
+        .brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand .highlight {
+            color: var(--cyan);
+            text-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Name and bio */
+        .name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            max-width: 600px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .bio strong {
+            color: var(--text-primary);
+        }
+
+        /* Social links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-dim);
+            transform: translateY(-2px);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Section divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            margin: 3rem 0;
+            opacity: 0.3;
+        }
+
+        /* Projects section */
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+        }
+
+        .section-title::after {
+            background: linear-gradient(90deg, transparent, var(--cyan));
+        }
+
+        /* Project cards grid */
+        .projects-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeUp 0.8s ease-out backwards;
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.2s; }
+        .project-card:nth-child(2) { animation-delay: 0.3s; }
+        .project-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .project-card:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 30px var(--cyan-dim);
+            transform: translateY(-4px);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .project-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        .status-beta {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+        }
+
+        .status-coming {
+            background: rgba(255, 200, 0, 0.1);
+            color: #ffc800;
+            border: 1px solid rgba(255, 200, 0, 0.3);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-link.primary {
+            background: var(--cyan);
+            color: var(--bg-dark);
+            font-weight: 500;
+        }
+
+        .project-link.primary:hover {
+            box-shadow: 0 0 20px var(--cyan-glow);
+            transform: translateY(-2px);
+        }
+
+        .project-link.secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .project-link.secondary:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .project-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Coming soon placeholder */
+        .coming-soon-card {
+            border-style: dashed;
+            opacity: 0.6;
+        }
+
+        .coming-soon-card:hover {
+            opacity: 1;
+            border-color: var(--border);
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .footer-text .cyan {
+            color: var(--cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .avatar {
+                width: 140px;
+                height: 140px;
+            }
+
+            .project-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .project-links {
+                flex-direction: column;
+            }
+
+            .project-link {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="circuit-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="avatar-wrapper">
+                <div class="avatar-ring"></div>
+                <img src="avatar.png" alt="Chris Williams" class="avatar">
+            </div>
+            
+            <h1 class="brand">PROMPT TO <span class="highlight">PRODUCTION</span></h1>
+            <p class="tagline">Vibe-Driven Development</p>
+            
+            <h2 class="name">Chris Williams</h2>
+            <p class="bio">
+                <strong>20+ years shipping production systems.</strong> Lead Architect by day. Building in public by night. Exploring how AI and Vibe-Driven Development can transform the way we build software, startups, and everything in between.
+            </p>
+
+            <div class="social-links">
+                <a href="https://x.com/ChrisWilliams_X" target="_blank" rel="noopener" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    @ChrisWilliams_X
+                </a>
+                <a href="https://github.com/prompt2production" target="_blank" rel="noopener" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Projects Section -->
+        <section class="projects">
+            <h3 class="section-title">Projects</h3>
+            
+            <div class="projects-grid">
+                <!-- FoundersTab -->
+                <article class="project-card">
+                    <div class="project-header">
+                        <h4 class="project-title">FoundersTab</h4>
+                        <span class="project-status status-beta">Public Beta</span>
+                    </div>
+                    <p class="project-description">
+                        A browser new tab extension designed for founders and builders. Replace your default new tab with a focused dashboard featuring quick links, daily goals, and curated resources to keep you productive and inspired.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://founderstab.com/" target="_blank" rel="noopener" class="project-link primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Visit Site
+                        </a>
+                        <a href="https://github.com/prompt2production/founders-tab" target="_blank" rel="noopener" class="project-link secondary">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            View Source
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Coming Soon Placeholder -->
+                <article class="project-card coming-soon-card">
+                    <div class="project-header">
+                        <h4 class="project-title">More Projects Coming Soon</h4>
+                        <span class="project-status status-coming">In Progress</span>
+                    </div>
+                    <p class="project-description">
+                        More projects are in development and will be shared here as they reach public beta. Follow along on X for updates on what's being built next.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://x.com/ChrisWilliams_X" target="_blank" rel="noopener" class="project-link secondary">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            Follow for Updates
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Built with <span class="cyan">vibes</span> and AI • © 2026 Prompt to Production</p>
+        </footer>
+    </div>
+</body>
+</html>
